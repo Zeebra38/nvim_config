@@ -42,10 +42,22 @@ set updatetime=100
 au TextYankPost * silent! lua vim.highlight.on_yank() " Highlight yank
 
 call plug#begin()
+" float terminal 
+Plug 'voldikss/vim-floaterm'
 
+Plug 'romgrk/barbar.nvim'
+
+Plug 'vim-airline/vim-airline'
+
+Plug 'scrooloose/nerdtree'
+Plug 'nvim-tree/nvim-web-devicons' " OPTIONAL: for file icons
 
 Plug 'tmhedberg/SimpylFold'
+
+" auto place closed bracket
+Plug 'jiangmiao/auto-pairs'
 "session management
+
 Plug 'tpope/vim-obsession'
 
 " Interface Plug 'itchyny/lightline.vim'
@@ -57,8 +69,8 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', {'branch': '0.1.x'}
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+"Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
@@ -71,7 +83,6 @@ Plug 'ray-x/lsp_signature.nvim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
-Plug 'airblade/vim-gitgutter'
 
 " Plug 'navarasu/onedark.nvim'
 Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
@@ -86,11 +97,12 @@ Plug 'jiangmiao/auto-pairs'
 " comments
 Plug 'scrooloose/nerdcommenter'
 
+Plug 'davidhalter/jedi-vim'
 " Plug 'dstein64/vim-startuptime'
 call plug#end()
 
 " let g:fzf_vim.preview_window = ['right,30%', 'ctrl--']
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
+"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
 
 lua << EOF
 local lspconfig = require'lspconfig'
@@ -283,10 +295,10 @@ nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up>    :echoe "Use k"<CR>
 nnoremap <Down>  :echoe "Use j"<CR>
 " ...and in insert mode
-inoremap <Left>  <ESC>:echoe "Use h"<CR>
-inoremap <Right> <ESC>:echoe "Use l"<CR>
-inoremap <Up>    <ESC>:echoe "Use k"<CR>
-inoremap <Down>  <ESC>:echoe "Use j"<CR>
+"inoremap <Left>  <ESC>:echoe "Use h"<CR>
+"inoremap <Right> <ESC>:echoe "Use l"<CR>
+"inoremap <Up>    <ESC>:echoe "Use k"<CR>
+"inoremap <Down>  <ESC>:echoe "Use j"<CR>
 " ; as :
 " nnoremap ; :
 
@@ -343,3 +355,13 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+
+" floaterm
+nnoremap   <silent>   <leader>ftn    :FloatermNew<CR>
+tnoremap   <silent>   <leader>ftn    <C-\><C-n>:FloatermNew<CR>
+nnoremap   <silent>   <leader>ftp    :FloatermPrev<CR>
+tnoremap   <silent>   <leader>ftp    <C-\><C-n>:FloatermPrev<CR>
+nnoremap   <silent>   <leader>ftn    :FloatermNext<CR>
+tnoremap   <silent>   <leader>ftn    <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <leader>ft   :FloatermToggle<CR>
+tnoremap   <silent>   <leader>ft   <C-\><C-n>:FloatermToggle<CR>
