@@ -42,7 +42,12 @@ set updatetime=100
 au TextYankPost * silent! lua vim.highlight.on_yank() " Highlight yank
 
 call plug#begin()
-" float terminal 
+
+" git
+Plug 'tpope/vim-fugitive'
+Plug 'FabijanZulj/blame.nvim'
+
+" float terminal
 Plug 'voldikss/vim-floaterm'
 
 Plug 'romgrk/barbar.nvim'
@@ -67,8 +72,11 @@ Plug 'editorconfig/editorconfig-vim'
 
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
+Plug 'princejoogie/dir-telescope.nvim'
+
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', {'branch': '0.1.x'}
+Plug 'nvim-telescope/telescope-live-grep-args.nvim'
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 "Plug 'junegunn/fzf.vim'
 
@@ -101,186 +109,9 @@ Plug 'davidhalter/jedi-vim'
 " Plug 'dstein64/vim-startuptime'
 call plug#end()
 
+
 " let g:fzf_vim.preview_window = ['right,30%', 'ctrl--']
 "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.8 } }
-
-lua << EOF
-local lspconfig = require'lspconfig'
-
--- Set up nvim-cmp.
-local cmp = require'cmp'
-
-cmp.setup({
-  snippet = {
-    -- REQUIRED by nvim-cmp. get rid of it once we can
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-  }, {
-    { name = 'path' },
-  }),
-  experimental = {
-      ghost_text = true,
-  }
-})
-
--- Enable completing paths in :
-cmp.setup.cmdline(':', {
-  sources = cmp.config.sources({
-    { name = 'path' }
-  })
-})
-
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-local opts = { noremap=true, silent=true }
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  local bufopts = { noremap=true, silent=true, buffer=bufnr }
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-  vim.keymap.set('n', '<space>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-  -- Disable hover in favor of Pyright
-  -- client.server_capabilities.hoverProvider = false
-  client.server_capabilities.semanticTokensProvider = nil
-end
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
---   vim.lsp.diagnostic.on_publish_diagnostics, {
---     virtual_text = true,
---     signs = true,
---     update_in_insert = true,
---   }
--- )
--- Set up lspconfig.
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-lspconfig.jedi_language_server.setup{
-}
--- lspconfig.pyright.setup {
---     on_attach = on_attach,
---     flags = lsp_flags,
---     capabilities = capabilities,
---     settings = {
---         python = {
---             analysis = {
---                 autoSearchPaths = true,
---                 useLibraryCodeForTypes = true,
---                 diagnosticMode = 'openFilesOnly',
---                 reportMissingModuleSource = false,
---             },
---         },
---     },
--- }
-lspconfig.ruff_lsp.setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    init_options = {
-        settings = {
-            -- any extra cli arguments for ruff go here
-            args = {
-            },
-        },
-    },
-}
-
-require "lsp_signature".setup({
-    hint_prefix = "",
-})
-
-require("catppuccin").setup({
-    integrations = {
-        cmp = true,
-        treesitter = true,
-    },
-    dim_inactive = {
-        enabled = true, -- dims the background color of inactive window
-        shade = "dark",
-        percentage = 0.15, -- percentage of the shade to apply to the inactive window
-    },
-    highlight_overrides = {
-        all = function(colors)
-            return {
-                LineNr = { bg = colors.mantle },
-                SignColumn = { bg = colors.mantle },
-                DiagnosticHint = { bg = colors.mantle },
-                DiagnosticInfo = { bg = colors.mantle },
-                DiagnosticWarn = { bg = colors.mantle },
-                DiagnosticError = { bg = colors.mantle },
-                DiagnosticSignHint = { bg = colors.mantle },
-                DiagnosticSignInfo = { bg = colors.mantle },
-                DiagnosticSignWarn = { bg = colors.mantle },
-                DiagnosticSignError = { bg = colors.mantle },
- 
-            }
-        end
-    },
-    styles = {
-        comments = { "italic" },
-    },
-})
-
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all" (the five listed parsers should always be installed)
-  ensure_installed = { "lua", "vim", "vimdoc", "query", "python" },
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  highlight = {
-    enable = true,
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
-
-require("aerial").setup({
-  -- optionally use on_attach to set keymaps when aerial has attached to a buffer
-  on_attach = function(bufnr)
-    -- Jump forwards/backwards with '{' and '}'
-    vim.keymap.set("n", "{", "<cmd>AerialPrev<CR>", { buffer = bufnr })
-    vim.keymap.set("n", "}", "<cmd>AerialNext<CR>", { buffer = bufnr })
-  end,
-})
--- You probably also want to set a keymap to toggle aerial
-vim.keymap.set("n", "<leader>a", "<cmd>AerialToggle!<CR>")
-EOF
 
 " autocmd CursorHold,CursorHoldI *.rs :lua require'lsp_extensions'.inlay_hints{ only_current_line = true }
 
@@ -351,7 +182,7 @@ let g:python_copy_reference = {
 
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+"nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
@@ -365,3 +196,10 @@ nnoremap   <silent>   <leader>ftn    :FloatermNext<CR>
 tnoremap   <silent>   <leader>ftn    <C-\><C-n>:FloatermNext<CR>
 nnoremap   <silent>   <leader>ft   :FloatermToggle<CR>
 tnoremap   <silent>   <leader>ft   <C-\><C-n>:FloatermToggle<CR>
+
+" blame 
+nnoremap <silent> <C-b> :BlameToggle window<CR>
+
+
+
+lua require('init')
