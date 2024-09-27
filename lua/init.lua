@@ -250,5 +250,17 @@ telescope.load_extension("dir")
 vim.keymap.set("n", "<leader>fd", "<cmd>Telescope dir live_grep<CR>", { noremap = true, silent = true })
 vim.keymap.set("n", "<leader>pd", "<cmd>Telescope dir find_files<CR>", { noremap = true, silent = true })
 
+require('attempt').setup()
+require('telescope').load_extension('attempt')
+
+local attempt = require('attempt')
+
+vim.keymap.set('n', '<leader>an', attempt.new_select)        -- new attempt, selecting extension
+vim.keymap.set('n', '<leader>ai', attempt.new_input_ext)     -- new attempt, inputing extension
+vim.keymap.set('n', '<leader>ar', attempt.run)               -- run attempt
+vim.keymap.set('n', '<leader>ad', attempt.delete_buf)        -- delete attempt from current buffer
+vim.keymap.set('n', '<leader>ac', attempt.rename_buf)        -- rename attempt from current buffer
+vim.keymap.set('n', '<leader>al', '<cmd>Telescope attempt<CR>', {noremap = true, silent = true})       -- search through attempts
+--or: map('n', '<leader>al', attempt.open_selectcope attempt -- use ui.select instead of telescope
 
 require('blame').setup({})

@@ -73,6 +73,8 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release' }
 Plug 'princejoogie/dir-telescope.nvim'
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'm-demare/attempt.nvim'
 
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', {'branch': '0.1.x'}
