@@ -54,38 +54,40 @@
 local lspconfig = require'lspconfig'
 
 -- Set up nvim-cmp.
-local cmp = require'cmp'
-
-cmp.setup({
-  snippet = {
-    -- REQUIRED by nvim-cmp. get rid of it once we can
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-  }),
-  sources = cmp.config.sources({
-    { name = 'nvim_lsp' },
-  }, {
-    { name = 'path' },
-  }),
-  experimental = {
-      ghost_text = true,
-  }
-})
-
--- Enable completing paths in :
-cmp.setup.cmdline(':', {
-  sources = cmp.config.sources({
-    { name = 'path' }
-  })
-})
+--[[
+   [local cmp = require'cmp'
+   [
+   [cmp.setup({
+   [  snippet = {
+   [    -- REQUIRED by nvim-cmp. get rid of it once we can
+   [    expand = function(args)
+   [      vim.fn["vsnip#anonymous"](args.body)
+   [    end,
+   [  },
+   [  mapping = cmp.mapping.preset.insert({
+   [    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+   [    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+   [    ['<C-Space>'] = cmp.mapping.complete(),
+   [    ['<C-e>'] = cmp.mapping.abort(),
+   [    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+   [  }),
+   [  sources = cmp.config.sources({
+   [    { name = 'nvim_lsp' },
+   [  }, {
+   [    { name = 'path' },
+   [  }),
+   [  experimental = {
+   [      ghost_text = true,
+   [  }
+   [})
+   [
+   [-- Enable completing paths in :
+   [cmp.setup.cmdline(':', {
+   [  sources = cmp.config.sources({
+   [    { name = 'path' }
+   [  })
+   [})
+   ]]
 
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -131,9 +133,16 @@ end
 --   }
 -- )
 -- Set up lspconfig.
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-lspconfig.jedi_language_server.setup{
-}
+--[[
+   [local capabilities = require('cmp_nvim_lsp').default_capabilities()
+   ]]
+
+--[[
+   [lspconfig.jedi_language_server.setup{
+   [}
+   ]]
+
+
 -- lspconfig.pyright.setup {
 --     on_attach = on_attach,
 --     flags = lsp_flags,
@@ -167,7 +176,9 @@ require "lsp_signature".setup({
 
 require("catppuccin").setup({
     integrations = {
-        cmp = true,
+        --[[
+           [cmp = true,
+           ]]
         treesitter = true,
     },
     dim_inactive = {
@@ -264,3 +275,4 @@ vim.keymap.set('n', '<leader>al', '<cmd>Telescope attempt<CR>', {noremap = true,
 --or: map('n', '<leader>al', attempt.open_selectcope attempt -- use ui.select instead of telescope
 
 require('blame').setup({})
+
