@@ -81,6 +81,7 @@ Plug 'm-demare/attempt.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', {'branch': '0.1.x'}
 Plug 'nvim-telescope/telescope-live-grep-args.nvim'
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 "Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 "Plug 'junegunn/fzf.vim'
 
@@ -111,6 +112,8 @@ Plug 'ranelpadon/python-copy-reference.vim'
 Plug 'scrooloose/nerdcommenter'
 
 Plug 'davidhalter/jedi-vim'
+
+Plug 'kevinhwang91/rnvimr'
 " Plug 'dstein64/vim-startuptime'
 call plug#end()
 
@@ -182,7 +185,7 @@ nnoremap <Leader>rd :PythonCopyReferenceDotted<CR>
 nnoremap <Leader>rp :PythonCopyReferencePytest<CR>
 nnoremap <Leader>ri :PythonCopyReferenceImport<CR>
 let g:python_copy_reference = {
-    \ 'remove_prefixes': ['web']
+    \ 'remove_prefixes': ['web', 'home', 'zeebra38', 'projects']
 \ }
 
 " Find files using Telescope command-line sugar.
@@ -191,6 +194,8 @@ nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
+" Telescope file browser
+nnoremap <silent> <leader>fb :Telescope file_browser<CR>
 
 " floaterm
 nnoremap   <silent>   <leader>ftn    :FloatermNew<CR>
@@ -205,7 +210,13 @@ tnoremap   <silent>   <leader>ft   <C-\><C-n>:FloatermToggle<CR>
 " blame 
 nnoremap <silent> <C-b> :BlameToggle window<CR>
 
+" jedi
+let g:jedi#show_call_signatures = 0
 
+" ranger
+tnoremap <silent> <leader>rr <C-\><C-n>:RnvimrResize<CR>
+nnoremap <silent> <leader>rt :RnvimrToggle<CR>
+tnoremap <silent> <leader>rt <C-\><C-n>:RnvimrToggle<CR>
 "inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
 
 inoremap <silent><expr> <TAB>
